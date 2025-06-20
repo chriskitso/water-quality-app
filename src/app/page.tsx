@@ -16,7 +16,7 @@ type WaterLog = {
   WaterTemp: number;
   Status: "Safe" | "Unsafe";
   timestamp: string;
-  [key: string]: any;
+ 
 };
 
 export default function Home() {

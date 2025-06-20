@@ -14,7 +14,7 @@ type WaterLog = {
   TDS: number;
   Turbidity: number;
   WaterTemp: number;
-  Status?: string;
+  Status: "Safe" | "Unsafe";
   timestamp: string;
   [key: string]: any;
 };
@@ -74,21 +74,21 @@ export default function Home() {
 
     const matchesFilter =
       filter === "safe"
-        ? log.Status?.toLowerCase() === "safe"
+        ? log.Status === "Safe"
         : filter === "unsafe"
-        ? log.Status?.toLowerCase() === "unsafe"
+        ? log.Status === "Unsafe"
         : filter === "alerts"
-        ? log.Status?.toLowerCase() === "unsafe"
+        ? log.Status === "Unsafe"
         : true;
 
-    const matchesStartDate = startDate ? new Date(log.timestamp) >= new Date(startDate) : true;
-    const matchesEndDate = endDate ? new Date(log.timestamp) <= new Date(endDate) : true;
+    const matchesStartDate = startDate ? new Date(log.timestamp) >= startDate : true;
+    const matchesEndDate = endDate ? new Date(log.timestamp) <= endDate : true;
 
     return matchesSearch && matchesFilter && matchesStartDate && matchesEndDate;
   });
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4">
       <h1 className="text-2xl font-bold mb-6 mt-4 text-teal-800 flex items-center gap-2">
         💧 Live Water Quality Logs
       </h1>

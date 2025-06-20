@@ -8,24 +8,34 @@ import { DatePicker } from "@/components/DatePicker";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
+type WaterLog = {
+  id: string;
+  pH: number;
+  TDS: number;
+  Turbidity: number;
+  WaterTemp: number;
+  Status?: string;
+  timestamp: string;
+  [key: string]: any;
+};
 
 export default function Home() {
-  const [logs, setLogs] = useState([]);
+  const [logs, setLogs] = useState<WaterLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   useEffect(() => {
     const fetchLogs = async () => {
       setLoading(true);
       try {
         const res = await fetch("https://water-quality-api-drjx.onrender.com/logs");
-        const data = await res.json();
+        const data: WaterLog[] = await res.json();
         const sortedData = data.sort(
-          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          (a: WaterLog, b: WaterLog) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
         setLogs(sortedData);
 
@@ -64,11 +74,11 @@ export default function Home() {
 
     const matchesFilter =
       filter === "safe"
-        ? log.Status === "Safe"
+        ? log.Status?.toLowerCase() === "safe"
         : filter === "unsafe"
-        ? log.Status === "Unsafe"
+        ? log.Status?.toLowerCase() === "unsafe"
         : filter === "alerts"
-        ? log.Status === "Unsafe"
+        ? log.Status?.toLowerCase() === "unsafe"
         : true;
 
     const matchesStartDate = startDate ? new Date(log.timestamp) >= new Date(startDate) : true;

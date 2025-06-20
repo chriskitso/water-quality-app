@@ -1,8 +1,9 @@
 // next.config.ts
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
+  output: "export", // 👈 enables static export (replaces deprecated `next export`)
+  reactStrictMode: true,
 };
 
 export default nextConfig;

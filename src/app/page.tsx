@@ -16,16 +16,18 @@ type WaterLog = {
   WaterTemp: number;
   Status: "Safe" | "Unsafe";
   timestamp: string;
- 
+  prediction: string;         // ✅ add this
+  recommendation: string;     // ✅ add this
 };
+
 
 export default function Home() {
   const [logs, setLogs] = useState<WaterLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -41,18 +43,11 @@ export default function Home() {
 
         const latest = sortedData[0];
         if (latest) {
-          if (latest.pH < 6.5 || latest.pH > 7.5) {
-            toast.warn("⚠️ pH level is unbalanced!");
-          }
-          if (latest.TDS > 500) {
-            toast.warn("⚠️ TDS exceeds safe limit!");
-          }
-          if (latest.Turbidity > 5) {
-            toast.warn("⚠️ Turbidity is high!");
-          }
-          if (latest.WaterTemp < 5 || latest.WaterTemp > 25) {
+          if (latest.pH < 6.5 || latest.pH > 7.5) toast.warn("⚠️ pH level is unbalanced!");
+          if (latest.TDS > 500) toast.warn("⚠️ TDS exceeds safe limit!");
+          if (latest.Turbidity > 5) toast.warn("⚠️ Turbidity is high!");
+          if (latest.WaterTemp < 5 || latest.WaterTemp > 25)
             toast.warn("⚠️ Temperature is out of range!");
-          }
         }
       } catch (error) {
         console.error("Failed to fetch logs", error);
@@ -65,7 +60,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const filteredLogs = logs.filter((log) => {
+  const filteredLogs = logs.filter((log: WaterLog) => {
     const matchesSearch = searchTerm
       ? Object.values(log).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
@@ -127,8 +122,8 @@ export default function Home() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full sm:w-64"
         />
-        <DatePicker date={startDate} setDate={setStartDate} placeholder="Start Date" />
-        <DatePicker date={endDate} setDate={setEndDate} placeholder="End Date" />
+        <DatePicker date={startDate} onDateChange={setStartDate} placeholder="Start Date" />
+        <DatePicker date={endDate} onDateChange={setEndDate} placeholder="End Date" />
       </div>
 
       {loading ? (

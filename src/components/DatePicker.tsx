@@ -1,3 +1,4 @@
+// src/components/DatePicker.tsx
 "use client";
 
 import * as React from "react";
@@ -10,16 +11,16 @@ import { Button } from "@/components/ui/button";
 
 interface DatePickerProps {
   date: Date | undefined;
-  onDateChange: (date: Date | undefined) => void;
+  setDate: (date: Date | undefined) => void;
   placeholder?: string;
 }
 
-export function DatePicker({ date, onDateChange, placeholder }: DatePickerProps) {
+export function DatePicker({ date, setDate, placeholder }: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
+          variant="outline"
           className={cn(
             "w-[180px] justify-start text-left font-normal",
             !date && "text-muted-foreground"
@@ -33,7 +34,7 @@ export function DatePicker({ date, onDateChange, placeholder }: DatePickerProps)
         <Calendar
           mode="single"
           selected={date}
-          onSelect={onDateChange}
+          onSelect={setDate}
           initialFocus
         />
       </PopoverContent>

@@ -1,4 +1,6 @@
+// src/components/ui/button.tsx
 "use client";
+
 import React from "react";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +17,7 @@ export const Button = ({
   type?: "button" | "submit" | "reset";
   variant?: "default" | "outline";
 }) => {
-  const base = "px-4 py-2 rounded transition";
+  const base = "px-4 py-2 rounded transition font-medium";
   const variants = {
     default: "bg-teal-600 text-white hover:bg-teal-700",
     outline: "border border-teal-600 text-teal-600 hover:bg-teal-50",
